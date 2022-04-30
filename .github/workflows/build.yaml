@@ -1,0 +1,27 @@
+name: TypeScript Build
+
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+      - 'python-simulator/**'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+      - 'python-simulator/**'
+    types:
+      - ready_for_review
+
+jobs:
+  build:
+    name: Build, Lint & Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'npm'
+          node-version-file: '.nvmrc'
+      - run: npm ci
+      - run: npm run build
+      - run: npm run test

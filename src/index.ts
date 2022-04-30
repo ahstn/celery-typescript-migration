@@ -1,6 +1,6 @@
 #!npx ts-node
 
-import yargs from 'yargs';
+import yargs from 'yargs'
 
 const args = yargs(process.argv.slice(2))
   .usage('Usage: $0 --broker (sqs|mq)')
@@ -9,7 +9,6 @@ const args = yargs(process.argv.slice(2))
     description: 'broker implementation to consume from',
     default: 'sqs',
   })
-  .demandOption('broker')
-  .argv
+  .demandOption('broker').argv
 
 console.log(args)

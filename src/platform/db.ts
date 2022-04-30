@@ -1,4 +1,4 @@
-import { Client } from 'pg';
+import { Client } from 'pg'
 
 export function client(): Client {
   return new Client({
@@ -6,5 +6,5 @@ export function client(): Client {
     port: 5432,
     user: 'postgres',
     password: 'mysecretpassword',
-  });
+  })
 }
