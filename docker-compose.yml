@@ -1,0 +1,31 @@
+services:
+  rabbitmq:
+    environment:
+      RABBITMQ_DEFAULT_VHOST: mq.local
+    image: rabbitmq:3
+    hostname: mq.local
+    ports:
+    - 127.0.0.1:5672:5672
+    restart: unless-stopped
+
+  sqs:
+    environment:
+      SERVICES: sqs
+    image: localstack/localstack:0.14
+    ports:
+    - 127.0.0.1:4566:4566
+    - 127.0.0.1:4571:4571
+    restart: unless-stopped
+
+  postgres:
+    environment:
+      POSTGRES_DB: northwind
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    hostname: postgres.local
+    image: postgres:14
+    ports:
+    - 127.0.0.1:5000:5432
+    restart: unless-stopped
+    volumes:
+    - ./sql/:/docker-entrypoint-initdb.d/
