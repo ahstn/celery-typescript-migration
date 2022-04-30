@@ -1,6 +1,6 @@
 type Context = {
-  readonly accountId: number,
-  readonly region: string,
+  readonly accountId: number
+  readonly region: string
 }
 
 export const getQueueUrl = (queueName: string, ctx: Context): string => {

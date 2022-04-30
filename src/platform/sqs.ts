@@ -1,58 +1,25 @@
-import AWS from 'aws-sdk';
-import { AWSError, SQS } from 'aws-sdk';
+import AWS from 'aws-sdk'
+import { AWSError, SQS } from 'aws-sdk'
 
-AWS.config.update({ region: 'us-east-1' });
-const sqs: SQS = new SQS({ endpoint: 'http://localhost:4566' });
+AWS.config.update({ region: 'us-east-1' })
+const sqs: SQS = new SQS({ endpoint: 'http://127.0.0.1:4566' })
 
-const listParams: SQS.Types.ListQueuesRequest = {};
-const createParams: SQS.Types.CreateQueueRequest = {
-  QueueName: 'typescript',
-  Attributes: {
-    DelaySeconds: '60',
-    MessageRetentionPeriod: '86400',
-  },
-};
-const sendParams: SQS.Types.SendMessageRequest = {
-  DelaySeconds: 10,
-  MessageAttributes: {
-    Method: {
-      DataType: 'String',
-      StringValue: 'add',
-    },
-  },
-  MessageBody: "Call method 'add'",
-  QueueUrl: 'http://localhost:4566/000000000000/typescript',
-};
+const readParams: SQS.Types.ReceiveMessageRequest = {
+  AttributeNames: ['SentTimestamp'],
+  MaxNumberOfMessages: 10,
+  MessageAttributeNames: ['All'],
+  QueueUrl: 'http://127.0.0.1:4566/000000000000/celery',
+  VisibilityTimeout: 20,
+  WaitTimeSeconds: 0,
+}
 
-sqs.createQueue(
-  createParams,
-  (err: AWSError, data: SQS.Types.CreateQueueResult) => {
-    if (err) {
-      console.log('Error', err);
-    } else {
-      console.log('Success', data.QueueUrl);
+sqs
+  .receiveMessage(readParams)
+  .promise()
+  .then((result: SQS.Types.ReceiveMessageResult) => {
+    console.log(result.Messages)
+    if (result.Messages) {
+      result.Messages.forEach((msg: SQS.Message) => console.log('Message', msg))
     }
-  }
-);
-
-sqs.listQueues(
-  listParams,
-  (err: AWSError, data: SQS.Types.ListQueuesResult) => {
-    if (err) {
-      console.log('Error', err);
-    } else {
-      console.log('Success', data.QueueUrls);
-    }
-  }
-);
-
-sqs.sendMessage(
-  sendParams,
-  (err: AWSError, data: SQS.Types.SendMessageResult) => {
-    if (err) {
-      console.log('Error', err);
-    } else {
-      console.log('Success', data.MessageId);
-    }
-  }
-);
+  })
+  .catch((err: AWSError) => console.log('Error', err))
