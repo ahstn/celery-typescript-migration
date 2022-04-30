@@ -1,4 +1,5 @@
 import { createWorker } from 'celery-node';
+
 import { client as GenerateClient } from './db'
 
 const worker = createWorker(
