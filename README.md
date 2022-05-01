@@ -3,6 +3,18 @@
 ## Introduction
 This repository aims to provide an example of how TypeScript (& hopefully Rust) can be used to consume workloads produced using Python (& Celery) to MQ and SQS.
 
+## Development
+
+Project Setup Overview:
+
+- TypeScript 4.6 with `ts-node` for executing `*.ts` files.
+  - e.g. `npx ts-node src/platform/sqs-create.ts`
+- ESLint with [plugin/promise], [plugin/functional], [plugin/comments] & [plugin/import] plugins
+- Concise `npm` scripts with [npm-run-all] for executing related processes.
+  - e.g. `test` will run `test:lint`, `test:prettier` and `test:spelling` after `build`.
+- GHA workflow that sets up NodeJS according to `.nvmrc` and caching for `npm`.
+
+
 ## Setup
 > Working notes - will frequently change and eventually be tidied up.
 
@@ -27,3 +39,9 @@ https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/sqs-examples-s
 https://github.com/localstack/localstack
 
 [rusty-celery]: https://github.com/rusty-celery/rusty-celery
+
+[plugin/promise]: https://github.com/xjamundx/eslint-plugin-promise
+[plugin/functional]: https://github.com/jonaskello/eslint-plugin-functional
+[plugin/comments]: https://github.com/mysticatea/eslint-plugin-eslint-comments
+[plugin/import]: https://github.com/import-js/eslint-plugin-import
+[npm-run-all]: https://github.com/mysticatea/npm-run-all
