@@ -1,3 +1,4 @@
+/* eslint-disable functional/no-return-void */
 import { createWorker } from 'celery-node'
 
 import { client as GenerateClient } from './db'

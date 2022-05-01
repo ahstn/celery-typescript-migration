@@ -1,3 +1,4 @@
+/* eslint-disable functional/no-return-void */
 import AWS from 'aws-sdk'
 import { AWSError, SQS } from 'aws-sdk'
 
