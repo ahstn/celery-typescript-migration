@@ -2,6 +2,8 @@
 import AWS from 'aws-sdk'
 import { AWSError, SQS } from 'aws-sdk'
 
+import { Message } from '../types/celery'
+
 AWS.config.update({ region: 'us-east-1' })
 const sqs: SQS = new SQS({ endpoint: 'http://127.0.0.1:4566' })
 
@@ -18,9 +20,15 @@ sqs
   .receiveMessage(readParams)
   .promise()
   .then((result: SQS.Types.ReceiveMessageResult) => {
-    console.log(result.Messages)
     if (result.Messages) {
-      result.Messages.forEach((msg: SQS.Message) => console.log('Message', msg))
+      result.Messages.forEach((msg: SQS.Message) => {
+        if (msg.Body) {
+          const body: Message = JSON.parse(
+            Buffer.from(msg.Body, 'base64').toString()
+          )
+          console.log(`Message: ${body.headers.task}, ${body.headers.argsrepr}`)
+        }
+      })
     }
   })
   .catch((err: AWSError) => console.log('Error', err))
