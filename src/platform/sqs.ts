@@ -20,15 +20,10 @@ sqs
   .receiveMessage(readParams)
   .promise()
   .then((result: SQS.Types.ReceiveMessageResult) => {
-    if (result.Messages) {
-      result.Messages.forEach((msg: SQS.Message) => {
-        if (msg.Body) {
-          const body: Message = JSON.parse(
-            Buffer.from(msg.Body, 'base64').toString()
-          )
-          console.log(`Message: ${body.headers.task}, ${body.headers.argsrepr}`)
-        }
-      })
-    }
+      result.Messages
+        ?.filter(msg => 'Body' in msg)
+        .map(msg => Buffer.from(msg.Body || '', 'base64').toString())
+        .map(msg => JSON.parse(msg) as Message)
+        .forEach(msg => console.log(`Message: ${msg.headers.task}, ${msg.headers.argsrepr}`))
   })
   .catch((err: AWSError) => console.log('Error', err))
