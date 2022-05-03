@@ -12,7 +12,8 @@ Project Setup Overview:
 - ESLint with [plugin/promise], [plugin/functional], [plugin/comments] & [plugin/import] plugins
 - Concise `npm` scripts with [npm-run-all] for executing related processes.
   - e.g. `test` will run `test:lint`, `test:prettier` and `test:spelling` after `build`.
-- GHA workflow that sets up NodeJS according to `.nvmrc` and caching for `npm`.
+- GHA workflow that sets up NodeJS according to `.nvmrc` with caching for `npm`.
+- [Dockerfile 1.4] syntax with [`--link`] & [`--mount=cache`] for more efficient copying and package caching.
 
 
 ## Setup
@@ -35,6 +36,8 @@ docker run --rm -it -e SERVICES=sqs -p 4566:4566 -p 4571:4571 localstack/localst
 export AWS_ACCESS_KEY_ID="test" AWS_SECRET_ACCESS_KEY="test" AWS_DEFAULT_REGION="us-east-1"
 ```
 
+SQS body -> base64 decode -> celery JSON format -> deserialize to TS
+
 https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/sqs-examples-send-receive-messages.html
 https://github.com/localstack/localstack
 
@@ -45,3 +48,7 @@ https://github.com/localstack/localstack
 [plugin/comments]: https://github.com/mysticatea/eslint-plugin-eslint-comments
 [plugin/import]: https://github.com/import-js/eslint-plugin-import
 [npm-run-all]: https://github.com/mysticatea/npm-run-all
+
+[Dockerfile 1.4]: https://hub.docker.com/r/docker/dockerfile
+[`--link`]: https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/syntax.md#linked-copies-copy---link-add---link
+[`--mount=cache`]: https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/syntax.md#run---mounttypecache
