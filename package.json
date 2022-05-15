@@ -21,11 +21,12 @@
     "test:spelling": "cspell --local 'en-GB' 'src/**/*.ts' README.md"
   },
   "engines": {
-    "node": "~16.14"
+    "node": "^16.14"
   },
   "dependencies": {
     "aws-sdk": "^2.1097.0",
     "celery-node": "^0.5.8",
+    "neverthrow": "^4.3.1",
     "pg": "~8.7",
     "yargs": "~17.4"
   },

@@ -1,6 +1,5 @@
-/* eslint-disable promise/always-return, functional/no-return-void */
-import AWS from 'aws-sdk'
-import { AWSError, SQS } from 'aws-sdk'
+import AWS, { SQS } from 'aws-sdk'
+import { err, ok, Result } from 'neverthrow'
 
 import { Message } from '../types/celery'
 
@@ -13,17 +12,20 @@ const readParams: SQS.Types.ReceiveMessageRequest = {
   MessageAttributeNames: ['All'],
   QueueUrl: 'http://127.0.0.1:4566/000000000000/celery',
   VisibilityTimeout: 20,
-  WaitTimeSeconds: 0,
+  WaitTimeSeconds: 20,
 }
 
-sqs
-  .receiveMessage(readParams)
-  .promise()
-  .then((result: SQS.Types.ReceiveMessageResult) => {
-      result.Messages
-        ?.filter(msg => 'Body' in msg)
-        .map(msg => Buffer.from(msg.Body || '', 'base64').toString())
-        .map(msg => JSON.parse(msg) as Message)
-        .forEach(msg => console.log(`Message: ${msg.headers.task}, ${msg.headers.argsrepr}`))
-  })
-  .catch((err: AWSError) => console.log('Error', err))
+export async function FetchMessages(): Promise<
+  Result<readonly Message[], Error>
+> {
+  const results = await sqs.receiveMessage(readParams).promise()
+  if (!results.Messages) {
+    return err(new Error(`no messages returned: ${results.Messages}`))
+  }
+
+  return ok(
+    results.Messages.map((msg) => Buffer.from(msg.Body, 'base64'))
+      .map((msg) => msg.toString())
+      .map((msg) => JSON.parse(msg) as Message)
+  )
+}
