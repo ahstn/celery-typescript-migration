@@ -1,10 +1,14 @@
 {
     "version": "0.2",
     "language": "en-GB",
+    "dictionaries": ["typescript", "node", "softwareTerms"],
     "words": [
         "rabbitmq",
         "localstack",
         "mysecretpassword",
-        "smallint"
+        "smallint",
+        "argsrepr",
+        "kwargsrepr",
+        "neverthrow"
     ]
 }
