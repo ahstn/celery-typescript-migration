@@ -1,9 +1,8 @@
-create database perfumer with owner "adam.houston";
+create database perfumer with owner "postgres";
 
-create schema public;
-alter schema public owner to "adam.houston";
+create schema if not exists public;
+alter schema public owner to "postgres";
 grant create, usage on schema public to public;
-
 
 create table if not exists brand (
     id   serial
@@ -11,7 +10,6 @@ create table if not exists brand (
             primary key,
     name text not null
 );
-
 create unique index if not exists brand_id_uindex
     on brand (id);
 
@@ -24,7 +22,6 @@ create table if not exists collection (
             references brand,
     description text
 );
-
 create unique index if not exists collection_id_uindex
     on collection (id);
 
@@ -53,7 +50,6 @@ create table if not exists note (
             primary key,
     title text
 );
-
 create unique index if not exists note_id_uindex
     on note (id);
 
@@ -66,5 +62,34 @@ create table if not exists fragrance_notes (
             references note
 );
 
+create table if not exists "user" (
+    id       serial
+        constraint user_pk
+            primary key,
+    forename varchar(30) not null,
+    surname  varchar(30) not null
+);
+create unique index if not exists user_id_uindex
+    on "user" (id);
+
+create table if not exists review (
+    id         serial
+        constraint review_pk
+            primary key,
+    user_id    integer             not null
+        constraint review_user_id_fk
+            references "user",
+    fragrance_id integer           not null
+        constraint review_fragrance_id_fk
+            references fragrance,
+    longevity  integer default 0 not null,
+    projection integer default 0 not null,
+    scent      integer default 0 not null,
+    "value"    integer default 0 not null,
+    constraint valid_scores
+        check ((longevity <= 5) and (projection <= 5) and (sillage <= 5) and (scent <= 5))
+);
+create unique index if not exists review_id_uindex
+    on review (id);
 
 create type season as ENUM ('spring', 'summer', 'autumn', 'winter');
