@@ -28,11 +28,15 @@ export function tracer(name: string) {
   console.log('creating tracer')
 
   const provider = new NodeTracerProvider({
-    resource: Resource.default().merge(new Resource({
-      [SemanticResourceAttributes.SERVICE_NAME]: name
-    }))
+    resource: Resource.default().merge(
+      new Resource({
+        [SemanticResourceAttributes.SERVICE_NAME]: name,
+      })
+    ),
   })
-  provider.addSpanProcessor(new SimpleSpanProcessor(new CollectorTraceExporter()))
+  provider.addSpanProcessor(
+    new SimpleSpanProcessor(new CollectorTraceExporter())
+  )
   provider.register()
 
   // Type conflicts, see: https://github.com/open-telemetry/opentelemetry-js-contrib/issues/983
@@ -43,12 +47,11 @@ export function tracer(name: string) {
       new PgInstrumentation(),
       // @ts-ignore
       new AwsInstrumentation({
-        suppressInternalInstrumentation: true
+        suppressInternalInstrumentation: true,
       }),
     ],
-    tracerProvider: provider
+    tracerProvider: provider,
   })
 
   return otel.getTracer(name)
 }
-

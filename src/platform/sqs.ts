@@ -28,11 +28,10 @@ export async function FetchMessages(): Promise<
   }
 
   return ok(
-    results.Messages
-      .map((msg) => Buffer.from(msg.Body, 'base64'))
+    results.Messages.map((msg) => Buffer.from(msg.Body, 'base64'))
       .map((msg) => msg.toString())
       .map((msg) =>
-        JSON.parse(msg, (k, v) => k === 'argsrepr' ? celeryArgsAsArray(v) : v)
+        JSON.parse(msg, (k, v) => (k === 'argsrepr' ? celeryArgsAsArray(v) : v))
       )
   )
 }
@@ -44,9 +43,5 @@ export async function FetchMessages(): Promise<
  * @returns transformed array
  */
 function celeryArgsAsArray(s: string): readonly string[] {
-  return s
-    .replace('(', '')
-    .replace(')', '')
-    .replace(', ', ',')
-    .split(',')
+  return s.replace('(', '').replace(')', '').replace(', ', ',').split(',')
 }

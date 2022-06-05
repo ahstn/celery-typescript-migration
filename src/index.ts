@@ -34,7 +34,9 @@ async function main() {
       data.forEach((msg: Message) => {
         switch (msg.headers.task) {
           case 'add':
-            const result = msg.headers.argsrepr.map(Number).reduce((a, b) => a + b)
+            const result = msg.headers.argsrepr
+              .map(Number)
+              .reduce((a, b) => a + b)
 
             console.log(`Result: ${result} task=[add]`)
             break
@@ -43,8 +45,8 @@ async function main() {
               .post('http://localhost:8080/hello-world')
               .send({ brand: 'Hello', species: 'cat' })
               .then((res) => console.log(res['body']))
-              .catch(console.error);
-            break;
+              .catch(console.error)
+            break
           default:
             console.log(`unknown task: ${msg.headers.task}`)
         }
