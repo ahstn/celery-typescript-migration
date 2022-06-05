@@ -1,1 +1,3 @@
 celery
+botocore
+boto3

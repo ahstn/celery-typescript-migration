@@ -11,8 +11,8 @@ const db = new Kysely<Database>({
       database: 'postgres',
       user: 'postgres',
       password: 'postgres',
-    })
-  })
+    }),
+  }),
 })
 
 async function ReviewAverages() {

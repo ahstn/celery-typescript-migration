@@ -1,22 +1,4 @@
 services:
-  rabbitmq:
-    environment:
-      RABBITMQ_DEFAULT_VHOST: mq.local
-    image: rabbitmq:3
-    hostname: mq.local
-    ports:
-    - 127.0.0.1:5672:5672
-    restart: unless-stopped
-
-  sqs:
-    environment:
-      SERVICES: sqs
-    image: localstack/localstack:0.14
-    ports:
-    - 127.0.0.1:4566:4566
-    - 127.0.0.1:4571:4571
-    restart: unless-stopped
-
   postgres:
     environment:
       POSTGRES_DB: northwind
@@ -26,6 +8,52 @@ services:
     image: postgres:14
     ports:
     - 127.0.0.1:5000:5432
-    restart: unless-stopped
     volumes:
     - ./sql/:/docker-entrypoint-initdb.d/
+
+  # Queue Brokers
+  rabbitmq:
+    environment:
+      RABBITMQ_DEFAULT_VHOST: mq.local
+    image: rabbitmq:3
+    hostname: mq.local
+    ports:
+    - 127.0.0.1:5672:5672
+  sqs:
+    environment:
+      SERVICES: sqs
+    image: localstack/localstack:0.14
+    ports:
+    - 127.0.0.1:4566:4566
+    - 127.0.0.1:4571:4571
+
+  http-listener:
+    image: mendhak/http-https-echo:24
+    ports:
+    - 127.0.0.1:8080:8080
+
+  # Tracing
+  jaeger-all-in-one:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - 16686:16686
+      - 14268
+      - 14250
+    profiles:
+    - tracing
+  otel-collector:
+    image: otel/opentelemetry-collector:0.52.0
+    command:
+      - '--config=/etc/otel-collector.yaml'
+    volumes:
+      - ./config/otel-collector.yaml:/etc/otel-collector.yaml
+    ports:
+      - 1888:1888   # pprof extension
+      - 8888:8888   # Prometheus metrics exposed by the collector
+      - 8889:8889   # Prometheus exporter metrics
+      - 13133:13133 # health_check extension
+      - 127.0.0.1:4317:4317        # OTLP gRPC receiver
+    depends_on:
+      - jaeger-all-in-one
+    profiles:
+    - tracing

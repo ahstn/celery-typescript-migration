@@ -15,6 +15,10 @@ const readParams: SQS.Types.ReceiveMessageRequest = {
   WaitTimeSeconds: 20,
 }
 
+/**
+ * Fetches messages from SQS according to the ReceiveMessageRequest.
+ * @returns result of messages and/or error
+ */
 export async function FetchMessages(): Promise<
   Result<readonly Message[], Error>
 > {
@@ -26,6 +30,18 @@ export async function FetchMessages(): Promise<
   return ok(
     results.Messages.map((msg) => Buffer.from(msg.Body, 'base64'))
       .map((msg) => msg.toString())
-      .map((msg) => JSON.parse(msg) as Message)
+      .map((msg) =>
+        JSON.parse(msg, (k, v) => (k === 'argsrepr' ? celeryArgsAsArray(v) : v))
+      )
   )
+}
+
+/**
+ * Transforms task args from a Celery string to an array of strings
+ * e.g. '(2, 2)' => string['2', '2']
+ * @param s task args string
+ * @returns transformed array
+ */
+function celeryArgsAsArray(s: string): readonly string[] {
+  return s.replace('(', '').replace(')', '').replace(', ', ',').split(',')
 }
