@@ -9,6 +9,10 @@
         "smallint",
         "argsrepr",
         "kwargsrepr",
-        "neverthrow"
+        "neverthrow",
+        "kysely",
+        "opentelemetry",
+        "otel",
+        "otlp"
     ]
 }

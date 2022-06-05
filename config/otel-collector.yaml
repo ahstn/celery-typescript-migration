@@ -4,8 +4,8 @@ receivers:
       grpc:
 
 exporters:
-  prometheus:
-    endpoint: "prometheus:8889"
+  # prometheus:
+  #   endpoint: "prometheus:8889"
   logging:
   jaeger:
     endpoint: jaeger-all-in-one:14250
@@ -27,7 +27,8 @@ service:
       receivers: [otlp]
       processors: [batch]
       exporters: [logging, jaeger]
-    metrics:
-      receivers: [otlp]
-      processors: [batch]
-      exporters: [logging, prometheus]
+    # metrics:
+    #   receivers: [otlp]
+    #   processors: [batch]
+    #   # exporters: [logging, prometheus]
+    #   exporters: [logging, prometheus]
