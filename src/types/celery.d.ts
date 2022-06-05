@@ -12,7 +12,8 @@ type Headers = {
   readonly id: string
   readonly retries: number
   readonly root_id: string
-  readonly argsrepr: string
+  readonly args: readonly string[]
+  readonly argsrepr: readonly string[]
   readonly kwargsrepr: string
   readonly origin: string
   readonly ignore_result: boolean
