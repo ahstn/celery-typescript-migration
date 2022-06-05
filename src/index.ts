@@ -1,6 +1,7 @@
 #!npx ts-node
 /* eslint-disable functional/no-return-void,no-case-declarations */
 
+import superagent from 'superagent'
 import yargs from 'yargs'
 
 import { FetchMessages } from './platform/sqs'
@@ -37,6 +38,13 @@ async function main() {
 
             console.log(`Result: ${result} task=[add]`)
             break
+          case 'import':
+            superagent
+              .post('http://localhost:8080/hello-world')
+              .send({ brand: 'Hello', species: 'cat' })
+              .then((res) => console.log(res['body']))
+              .catch(console.error);
+            break;
           default:
             console.log(`unknown task: ${msg.headers.task}`)
         }
