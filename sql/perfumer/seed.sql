@@ -20,25 +20,56 @@ values  ('Hermès'),
         ('Guerlain'),
         ('Kilian'),
         ('Van Cleef & Arpels'),
-        ('Givenchy');
+        ('Givenchy'),
+        ('Paco Rabanne');
 
 insert into public.collection (brand_id, description)
 values  (1, 'd''Terre Hermès'),
         (2, 'Dior Homme'),
         (6, 'The Liquors'),
-        (7, 'Extraordinaire');
+        (7, 'Extraordinaire'),
+        (2, 'Private Blend');
 
 insert into public.fragrance (brand_id, collection_id, concentration, title)
 values  (1, 1, 'edt', 'Terre d''Hermès'),
         (1, 1, 'edp', 'Terre d''Hermès Eau Intense Vetiver'),
-        (6, 3, 'edt', 'Homme'),
-        (6, 3, 'edp', 'Homme Intense'),
+        (2, 2, 'edt', 'Homme'),
+        (2, 2, 'edp', 'Homme Intense'),
         (6, 3, 'edp', 'Apple Brandy'),
         (6, 3, 'edp', 'Angels'' Share'),
         (6, 3, 'edp', 'Roses on Ice'),
-        (7, 4, 'edp', 'Moonlight Patchouli');
+        (7, 4, 'edp', 'Moonlight Patchouli'),
+        (2, 5, 'edt', 'Neroli Portofino'),
+        (9, null, 'edt', 'Phantom');
 
 insert into public.review (user_id, fragrance_id, longevity, projection, value, scent)
-values  (1, 1, 4, 3, 3, 4),
+values  (1, 1, 4, 3, 3, 4), -- Terre d'Hermes Reviews
         (3, 1, 4, 3, 4, 5),
-        (3, 1, 4, 3, 3, 4);
+        (7, 1, 4, 3, 3, 4),
+
+        (2, 3, 4, 3, 3, 3), -- Dior Homme Reviews
+        (4, 3, 4, 3, 3, 3),
+        (5, 3, 3, 2, 2, 4),
+        (7, 3, 4, 3, 3, 4),
+
+        (1, 5, 4, 3, 3, 4), -- Apple Brandy Reviews
+        (2, 5, 4, 3, 3, 4),
+        (4, 5, 4, 3, 3, 4),
+
+        (1, 6, 4, 2, 1, 4), -- Angels' Share Reviews
+        (2, 6, 4, 3, 2, 3),
+        (4, 6, 3, 2, 2, 4),
+
+        (1, 8, 4, 3, 3, 4), -- Moonlight Patchouli Reviews
+        (2, 8, 5, 4, 3, 5),
+        (4, 8, 4, 5, 2, 4),
+
+        (1, 9, 2, 3, 1, 4), -- Neroli Portofino Reviews
+        (2, 9, 4, 3, 2, 5),
+        (5, 9, 5, 3, 2, 5),
+        (6, 9, 2, 3, 2, 4),
+
+        (2, 10, 3, 3, 2, 1), -- Phantom Reviews
+        (3, 10, 3, 3, 3, 3),
+        (5, 10, 3, 3, 2, 1),
+        (6, 10, 3, 4, 3, 2);
